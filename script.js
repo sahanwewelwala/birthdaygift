@@ -2,14 +2,14 @@
 
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* ── page state ── */
+/* ── Page state ── */
 let currentPage = 1;
-const TOTAL = 4;
 
-function showPage(n, direction = 'next') {
+function showPage(n) {
+  if (n === currentPage) return;
   const prev = document.getElementById(`page-${currentPage}`);
   const next = document.getElementById(`page-${n}`);
-  if (!next || n === currentPage) return;
+  if (!next) return;
 
   prev.classList.remove('active');
   prev.classList.add('exit');
@@ -29,168 +29,162 @@ function updateDots() {
   });
 }
 
-/* ── page 1: envelope + card ── */
+/* ════════════════════════════════════
+   PAGE 1 — envelope + two-sided card
+════════════════════════════════════ */
 let envelopeOpened = false;
-let cardAnimDone   = false;
+let cardTextDone   = false;
 
+/* Step 1: tap envelope → flap opens → envelope hides → card appears */
 function openEnvelope() {
   if (envelopeOpened) return;
   envelopeOpened = true;
 
-  const flap = document.getElementById('envFlap');
-  const card = document.getElementById('card');
-  const seal = document.querySelector('.wax-seal');
-  const hint = document.getElementById('hintEnvelope');
+  const envFlap   = document.getElementById('envFlap');
+  const envScene  = document.getElementById('envScene');
+  const cardScene = document.getElementById('cardScene');
+  const bookRight = document.getElementById('bookRight');
 
-  /* open flap */
-  flap.classList.add('open');
-  if (seal) seal.style.opacity = '0';
-  if (hint) hint.style.opacity = '0';
+  /* Open the flap */
+  envFlap.classList.add('open');
 
-  /* lift card */
-  const liftDelay = reducedMotion ? 100 : 700;
+  /* After flap fully opens: fade out envelope */
   setTimeout(() => {
-    card.classList.add('lifted');
-    animateCardText();
-  }, liftDelay);
+    envScene.classList.add('hiding');
+  }, reducedMotion ? 100 : 750);
+
+  /* Show the greeting card scene */
+  setTimeout(() => {
+    cardScene.classList.add('visible');
+
+    /* Swing the right panel open */
+    setTimeout(() => {
+      bookRight.classList.add('open');
+
+      /* Animate handwritten text after panel is ~halfway open */
+      setTimeout(animateCardText, reducedMotion ? 0 : 550);
+    }, reducedMotion ? 0 : 300);
+
+  }, reducedMotion ? 200 : 1200);
 }
 
+/* Step 2: text writes itself in */
 function animateCardText() {
   const lines     = document.querySelectorAll('.hand-line');
+  const underline = document.querySelector('.underline-path');
   const sentences = document.querySelectorAll('.hand-sentence');
-  const underline = document.querySelector('.hand-underline');
-  const tapHint   = document.getElementById('cardTap');
+  const tapBtn    = document.getElementById('cardTapBtn');
+  const step = reducedMotion ? 0 : 270;
+  let t = reducedMotion ? 0 : 180;
 
-  const base = reducedMotion ? 0 : 200;
-  const step = reducedMotion ? 0 : 280;
-
-  lines.forEach((el, i) => {
-    setTimeout(() => el.classList.add('visible'), base + i * step);
+  lines.forEach(el => {
+    setTimeout(() => el.classList.add('visible'), t);
+    t += step;
   });
 
-  /* draw underline after lines appear */
-  const underlineAt = base + lines.length * step + 50;
-  setTimeout(() => underline && underline.classList.add('drawn'), underlineAt);
+  /* draw underline */
+  setTimeout(() => underline && underline.classList.add('drawn'), t);
+  t += reducedMotion ? 0 : 150;
 
-  /* sentences */
-  sentences.forEach((el, i) => {
-    setTimeout(() => el.classList.add('visible'), underlineAt + 200 + i * step);
+  sentences.forEach(el => {
+    setTimeout(() => el.classList.add('visible'), t);
+    t += step;
   });
 
-  /* show tap hint */
-  const tapAt = underlineAt + 200 + sentences.length * step + 300;
+  /* show the continue button */
   setTimeout(() => {
-    if (tapHint) tapHint.classList.add('show');
-    cardAnimDone = true;
-  }, tapAt);
+    tapBtn && tapBtn.classList.add('show');
+    cardTextDone = true;
+  }, t + (reducedMotion ? 0 : 300));
 }
 
+/* Reset page 1 for replay */
 function resetPage1() {
   envelopeOpened = false;
-  cardAnimDone   = false;
-  const flap  = document.getElementById('envFlap');
-  const card  = document.getElementById('card');
-  const seal  = document.querySelector('.wax-seal');
-  const hint  = document.getElementById('hintEnvelope');
-  const tapHint = document.getElementById('cardTap');
+  cardTextDone   = false;
 
-  flap.classList.remove('open');
-  card.classList.remove('lifted');
-  if (seal) seal.style.opacity = '1';
-  if (hint) hint.style.opacity = '1';
-  if (tapHint) tapHint.classList.remove('show');
+  const envFlap   = document.getElementById('envFlap');
+  const envScene  = document.getElementById('envScene');
+  const cardScene = document.getElementById('cardScene');
+  const bookRight = document.getElementById('bookRight');
+
+  envFlap.classList.remove('open');
+  envScene.classList.remove('hiding');
+  cardScene.classList.remove('visible');
+  bookRight.classList.remove('open');
 
   document.querySelectorAll('.hand-line, .hand-sentence').forEach(el => el.classList.remove('visible'));
-  const underline = document.querySelector('.hand-underline');
-  if (underline) underline.classList.remove('drawn');
+  const ul = document.querySelector('.underline-path');
+  if (ul) ul.classList.remove('drawn');
+  const btn = document.getElementById('cardTapBtn');
+  if (btn) btn.classList.remove('show');
 }
 
-/* ── page 2: staggered wish fade-in ── */
+/* ── Envelope click ── */
+document.getElementById('envelope').addEventListener('click', openEnvelope);
+
+/* ── Card continue button ── */
+document.getElementById('cardTapBtn')?.addEventListener('click', () => showPage(2));
+
+/* ── Page 2 wish fade-in ── */
 function animateWish() {
   const els = document.querySelectorAll('#page-2 .wish-eyebrow, #page-2 .wish-title, #page-2 .wish-body, #page-2 .wish-sign');
-  els.forEach((el, i) => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(18px)';
+  els.forEach(el => {
     el.style.transition = 'none';
+    el.style.opacity    = '0';
+    el.style.transform  = 'translateY(16px)';
   });
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      const step = reducedMotion ? 0 : 180;
-      els.forEach((el, i) => {
-        el.style.transition = `opacity .6s ease ${i * step}ms, transform .6s ease ${i * step}ms`;
-        el.style.opacity = '1';
-        el.style.transform = 'translateY(0)';
-      });
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    els.forEach((el, i) => {
+      const delay = reducedMotion ? 0 : i * 170;
+      el.style.transition = `opacity .6s ease ${delay}ms, transform .6s ease ${delay}ms`;
+      el.style.opacity    = '1';
+      el.style.transform  = 'translateY(0)';
     });
-  });
+  }));
 }
 
-/* ── click / tap handlers ── */
-
-/* envelope tap → open */
-document.getElementById('envelope').addEventListener('click', () => {
-  if (!envelopeOpened) {
-    openEnvelope();
-  } else if (cardAnimDone) {
-    showPage(2);
-  }
-});
-
-/* card tap to continue */
-document.getElementById('cardTap')?.addEventListener('click', (e) => {
-  e.stopPropagation();
-  if (cardAnimDone) showPage(2);
-});
-
-/* next buttons */
+/* ── Next buttons (pages 2 and 3) ── */
 document.querySelectorAll('[data-next]').forEach(btn => {
   btn.addEventListener('click', () => {
-    if (currentPage < TOTAL) showPage(currentPage + 1);
+    if (currentPage < 4) showPage(currentPage + 1);
   });
 });
 
-/* restart */
+/* ── Restart ── */
 document.getElementById('restartBtn')?.addEventListener('click', () => showPage(1));
 
-/* dot nav */
+/* ── Dot navigation ── */
 document.querySelectorAll('.dot-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    const target = parseInt(btn.dataset.go);
-    if (target && target !== currentPage) showPage(target);
+    const t = parseInt(btn.dataset.go);
+    if (t && t !== currentPage) showPage(t);
   });
 });
 
-/* ── keyboard navigation ── */
+/* ── Keyboard navigation ── */
 document.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
     if (currentPage === 1 && !envelopeOpened) { openEnvelope(); return; }
-    if (currentPage === 1 && cardAnimDone) { showPage(2); return; }
-    if (currentPage > 1 && currentPage < TOTAL) showPage(currentPage + 1);
+    if (currentPage < 4) showPage(currentPage + 1);
   }
-  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-    if (currentPage > 1) showPage(currentPage - 1);
+  if ((e.key === 'ArrowLeft' || e.key === 'ArrowUp') && currentPage > 1) {
+    showPage(currentPage - 1);
   }
 });
 
-/* ── swipe gestures ── */
-let touchStartX = 0;
-let touchStartY = 0;
-
-document.addEventListener('touchstart', e => {
-  touchStartX = e.touches[0].clientX;
-  touchStartY = e.touches[0].clientY;
-}, { passive: true });
-
+/* ── Swipe gestures ── */
+let tx = 0, ty = 0;
+document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, { passive: true });
 document.addEventListener('touchend', e => {
-  const dx = e.changedTouches[0].clientX - touchStartX;
-  const dy = e.changedTouches[0].clientY - touchStartY;
-  if (Math.abs(dx) < 40 && Math.abs(dy) < 40) return;   /* tap, not swipe */
+  const dx = e.changedTouches[0].clientX - tx;
+  const dy = e.changedTouches[0].clientY - ty;
+  if (Math.abs(dx) < 40 && Math.abs(dy) < 40) return;
   if (Math.abs(dx) > Math.abs(dy)) {
-    /* horizontal swipe */
-    if (dx < -40 && currentPage < TOTAL) showPage(currentPage + 1);
-    if (dx >  40 && currentPage > 1)     showPage(currentPage - 1);
+    if (dx < -40 && currentPage < 4) showPage(currentPage + 1);
+    if (dx >  40 && currentPage > 1) showPage(currentPage - 1);
   }
 }, { passive: true });
 
-/* ── init ── */
+/* ── Init ── */
 updateDots();

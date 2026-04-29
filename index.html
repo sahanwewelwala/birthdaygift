@@ -12,7 +12,6 @@
 </head>
 <body>
 
-<!-- Floating hearts/petals background -->
 <div class="petals" aria-hidden="true">
   <span></span><span></span><span></span><span></span><span></span>
   <span></span><span></span><span></span><span></span><span></span>
@@ -21,57 +20,77 @@
 
 <main id="stage">
 
-  <!-- ============== PAGE 1: ENVELOPE / CARD OPENING ============== -->
-  <section class="page page--envelope active" id="page-1" aria-label="Birthday envelope">
-    <div class="envelope-wrap">
+  <!-- =========== PAGE 1 =========== -->
+  <section class="page active" id="page-1" aria-label="Birthday envelope">
+
+    <!-- SCENE A: Closed envelope -->
+    <div class="env-scene" id="envScene">
       <div class="envelope" id="envelope">
-        <div class="env-back"></div>
+        <!-- Body -->
+        <div class="env-body">
+          <div class="env-tri env-tri--l"></div>
+          <div class="env-tri env-tri--r"></div>
+          <div class="env-tri env-tri--b"></div>
+        </div>
+        <!-- Flap (covers the top as a downward V) -->
+        <div class="env-flap" id="envFlap">
+          <div class="wax-seal" id="waxSeal">♥</div>
+        </div>
+      </div>
+      <p class="hint">tap to open</p>
+    </div>
 
-        <!-- The card that lifts out of the envelope -->
-        <div class="card" id="card">
-          <div class="card-front">
-            <div class="card-decor card-decor--tl">✦</div>
-            <div class="card-decor card-decor--tr">✦</div>
-            <div class="card-decor card-decor--bl">✦</div>
-            <div class="card-decor card-decor--br">✦</div>
+    <!-- SCENE B: Two-sided greeting card -->
+    <div class="card-scene" id="cardScene">
+      <div class="book-card" id="bookCard">
 
-            <!-- ============================================== -->
-            <!-- WELCOME CARD TEXT                              -->
-            <!-- ============================================== -->
-            <h1 class="hand-title" id="handTitle">
-              <span class="hand-line">Happy Birthday,</span>
-              <span class="hand-line">my love <span class="heart">❤</span></span>
-              <span class="hand-underline" aria-hidden="true">
-                <svg viewBox="0 0 220 20" preserveAspectRatio="none" aria-hidden="true">
-                  <path d="M5 12 Q 60 2 110 10 T 215 8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-                </svg>
-              </span>
-            </h1>
-
-            <p class="hand-body">
-              <span class="hand-sentence">You are the quiet light in my days</span>
-              <span class="hand-sentence">and the warmth in every moment.</span>
-              <span class="hand-sentence">Today, I celebrate not just your birth,</span>
-              <span class="hand-sentence">but the beauty you bring into my world.</span>
-            </p>
-            <!-- ============================================== -->
-
-            <p class="card-tap" id="cardTap">tap to continue →</p>
+        <!-- Left cover panel -->
+        <div class="book-left">
+          <div class="book-cover-inner">
+            <span class="bc-decor">✦ ✦ ✦</span>
+            <p class="bc-eyebrow">a little something</p>
+            <div class="bc-heart">❤</div>
+            <p class="bc-tagline">with all my love</p>
           </div>
         </div>
 
-        <div class="env-front"></div>
-        <div class="env-flap" id="envFlap">
-          <div class="wax-seal">♥</div>
-        </div>
-      </div>
+        <!-- Right inside panel (opens like a book) -->
+        <div class="book-right" id="bookRight">
+          <div class="book-right-inner">
+            <div class="card-decor card-decor--tl">✦</div>
+            <div class="card-decor card-decor--tr">✦</div>
 
-      <p class="hint" id="hintEnvelope">tap the envelope</p>
+            <!-- ============================================ -->
+            <!-- WELCOME CARD TEXT                           -->
+            <!-- ============================================ -->
+            <h1 class="hand-title">
+              <span class="hand-line hl1">Happy Birthday,</span>
+              <span class="hand-line hl2">my love <span class="heart">❤</span></span>
+              <span class="hand-underline" id="handUnderline">
+                <svg viewBox="0 0 220 20" preserveAspectRatio="none" aria-hidden="true">
+                  <path class="underline-path" d="M5 12 Q 60 2 110 10 T 215 8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                </svg>
+              </span>
+            </h1>
+            <p class="hand-body">
+              <span class="hand-sentence hs1">You are the quiet light in my days</span>
+              <span class="hand-sentence hs2">and the warmth in every moment.</span>
+              <span class="hand-sentence hs3">Today, I celebrate not just your birth,</span>
+              <span class="hand-sentence hs4">but the beauty you bring into my world.</span>
+            </p>
+            <!-- ============================================ -->
+
+            <button class="card-tap-btn" id="cardTapBtn">continue ♥</button>
+          </div>
+        </div>
+
+      </div>
     </div>
+
   </section>
 
-  <!-- ============== PAGE 2: ROMANTIC WISH ============== -->
-  <section class="page page--wish" id="page-2" aria-label="Birthday wish">
+  <!-- =========== PAGE 2: ROMANTIC WISH =========== -->
+  <section class="page" id="page-2" aria-label="Birthday wish">
     <div class="wish">
       <div class="wish-frame">
         <div class="corner tl"></div>
@@ -81,9 +100,9 @@
 
         <p class="wish-eyebrow">to my favorite person</p>
 
-        <!-- ============================================== -->
-        <!-- INNER PAGE TEXT                                -->
-        <!-- ============================================== -->
+        <!-- ============================================ -->
+        <!-- INNER PAGE TEXT                             -->
+        <!-- ============================================ -->
         <h2 class="wish-title">Happy Birthday, my love <span class="heart">❤</span></h2>
         <p class="wish-body">
           On this beautiful day, I celebrate <em>you</em> — your grace, your warmth,
@@ -100,21 +119,19 @@
           just how deeply you are cherished.
         </p>
         <p class="wish-sign">— always yours</p>
-        <!-- ============================================== -->
+        <!-- ============================================ -->
 
       </div>
-
       <button class="next-btn" data-next>continue ♥</button>
     </div>
   </section>
 
-  <!-- ============== PAGE 3: SKETCH BEAR + CAKE ============== -->
-  <section class="page page--sketch" id="page-3" aria-label="Birthday bear and cake">
+  <!-- =========== PAGE 3: SKETCH BEAR + CAKE =========== -->
+  <section class="page" id="page-3" aria-label="Birthday bear and cake">
     <div class="sketch-wrap">
       <h2 class="sketch-title">a little birthday surprise…</h2>
 
       <div class="sketch-stage">
-        <!-- SVG sketch illustration -->
         <svg class="sketch-svg" viewBox="0 0 520 520" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <defs>
             <filter id="rough" x="-5%" y="-5%" width="110%" height="110%">
@@ -123,7 +140,6 @@
             </filter>
           </defs>
 
-          <!-- Confetti -->
           <g class="confetti">
             <circle class="c c1" cx="60" cy="80" r="4"/>
             <circle class="c c2" cx="120" cy="40" r="3"/>
@@ -136,43 +152,25 @@
             <rect class="c c9" x="90" y="130" width="5" height="5" transform="rotate(-15 92 132)"/>
           </g>
 
-          <!-- ===== BEAR (sketch) ===== -->
           <g class="bear" filter="url(#rough)">
-            <!-- ears -->
             <circle class="ink" cx="170" cy="180" r="28" fill="none"/>
             <circle class="ink" cx="280" cy="180" r="28" fill="none"/>
             <circle class="ink-fill-pink" cx="170" cy="180" r="14"/>
             <circle class="ink-fill-pink" cx="280" cy="180" r="14"/>
-
-            <!-- head -->
             <ellipse class="ink" cx="225" cy="240" rx="80" ry="72" fill="none"/>
-
-            <!-- snout -->
             <ellipse class="ink" cx="225" cy="270" rx="38" ry="28" fill="none"/>
-
-            <!-- nose -->
             <ellipse class="ink-fill" cx="225" cy="252" rx="7" ry="5"/>
-
-            <!-- mouth -->
             <path class="ink" d="M225 258 V272 M225 272 Q212 282 205 274 M225 272 Q238 282 245 274" fill="none"/>
-
-            <!-- eyes (closed happy) -->
             <path class="ink eye eye-l" d="M188 222 q8 -8 16 0" fill="none"/>
             <path class="ink eye eye-r" d="M246 222 q8 -8 16 0" fill="none"/>
-
-            <!-- cheeks -->
             <circle class="cheek" cx="170" cy="252" r="9"/>
             <circle class="cheek" cx="280" cy="252" r="9"/>
-
-            <!-- party hat -->
             <g class="hat">
               <path class="ink-fill-coral" d="M195 165 L225 95 L255 165 Z"/>
               <path class="ink" d="M195 165 L225 95 L255 165 Z" fill="none"/>
               <circle class="ink-fill-cream" cx="225" cy="95" r="6"/>
               <line class="ink" x1="200" y1="150" x2="250" y2="150"/>
             </g>
-
-            <!-- arms holding cake -->
             <path class="ink arm-l" d="M150 305 q-15 25 5 50" fill="none"/>
             <path class="ink arm-r" d="M300 305 q15 25 -5 50" fill="none"/>
             <ellipse class="ink-fill-cream" cx="155" cy="358" rx="12" ry="10"/>
@@ -181,26 +179,17 @@
             <ellipse class="ink" cx="295" cy="358" rx="12" ry="10" fill="none"/>
           </g>
 
-          <!-- ===== CAKE (sketch) ===== -->
           <g class="cake" filter="url(#rough)">
-            <!-- plate -->
             <ellipse class="ink-fill-cream" cx="225" cy="455" rx="115" ry="14"/>
             <ellipse class="ink" cx="225" cy="455" rx="115" ry="14" fill="none"/>
-
-            <!-- bottom tier -->
             <rect class="ink-fill-pink" x="140" y="400" width="170" height="50" rx="4"/>
             <path class="ink" d="M140 400 h170 v50 h-170 z" fill="none"/>
-            <!-- frosting drip -->
             <path class="ink-fill-cream" d="M140 400 q12 14 24 0 q12 14 24 0 q12 14 24 0 q12 14 24 0 q12 14 24 0 q12 14 24 0 q12 14 26 0 v-12 h-170 z"/>
             <path class="ink" d="M140 400 q12 14 24 0 q12 14 24 0 q12 14 24 0 q12 14 24 0 q12 14 24 0 q12 14 24 0 q12 14 26 0" fill="none"/>
-
-            <!-- top tier -->
             <rect class="ink-fill-coral" x="175" y="350" width="100" height="40" rx="4"/>
             <path class="ink" d="M175 350 h100 v40 h-100 z" fill="none"/>
             <path class="ink-fill-cream" d="M175 350 q10 12 20 0 q10 12 20 0 q10 12 20 0 q10 12 20 0 q10 12 20 0 v-10 h-100 z"/>
             <path class="ink" d="M175 350 q10 12 20 0 q10 12 20 0 q10 12 20 0 q10 12 20 0 q10 12 20 0" fill="none"/>
-
-            <!-- sprinkles -->
             <g class="sprinkles">
               <line class="ink-pink" x1="155" y1="425" x2="160" y2="430"/>
               <line class="ink-coral" x1="180" y1="430" x2="185" y2="425"/>
@@ -211,8 +200,6 @@
               <line class="ink-pink" x1="225" y1="372" x2="230" y2="377"/>
               <line class="ink-coral" x1="255" y1="370" x2="260" y2="375"/>
             </g>
-
-            <!-- candles -->
             <g class="candles">
               <rect class="ink-fill-pink" x="195" y="320" width="6" height="30"/>
               <rect class="ink" x="195" y="320" width="6" height="30" fill="none"/>
@@ -220,8 +207,6 @@
               <rect class="ink" x="222" y="315" width="6" height="35" fill="none"/>
               <rect class="ink-fill-pink" x="249" y="320" width="6" height="30"/>
               <rect class="ink" x="249" y="320" width="6" height="30" fill="none"/>
-
-              <!-- flames -->
               <g class="flames">
                 <path class="flame f1" d="M198 320 q-4 -8 0 -14 q4 6 0 14 z"/>
                 <path class="flame f2" d="M225 315 q-4 -9 0 -16 q4 7 0 16 z"/>
@@ -230,7 +215,6 @@
             </g>
           </g>
 
-          <!-- "happy birthday" handwritten arc -->
           <path id="arc" d="M 80 130 Q 260 50 440 130" fill="none"/>
           <text class="arc-text" font-family="Caveat, cursive" font-size="34">
             <textPath href="#arc" startOffset="50%" text-anchor="middle">happy birthday ♥</textPath>
@@ -243,33 +227,46 @@
     </div>
   </section>
 
-  <!-- ============== PAGE 4: PICKUP / PLAN ============== -->
-  <section class="page page--plan" id="page-4" aria-label="Plan for the day">
-    <div class="plan">
-      <div class="ticket">
-        <div class="ticket-top">
-          <span class="ticket-label">today's plan</span>
-          <span class="ticket-heart">♥</span>
+  <!-- =========== PAGE 4: PLAN (two-sided card) =========== -->
+  <section class="page" id="page-4" aria-label="Plan for the day">
+    <div class="plan-wrap">
+      <div class="book-card book-card--plan">
+
+        <!-- Left panel: decorative -->
+        <div class="book-left book-left--plan">
+          <div class="book-cover-inner">
+            <span class="bc-decor">✦ ✦ ✦</span>
+            <p class="bc-eyebrow">today's plan</p>
+            <div class="bc-heart">♥</div>
+            <p class="bc-tagline">just for you</p>
+          </div>
         </div>
 
-        <div class="ticket-divider"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <!-- Right panel: pickup details -->
+        <div class="book-right book-right--plan">
+          <div class="book-right-inner">
+            <div class="card-decor card-decor--tl">✦</div>
+            <div class="card-decor card-decor--tr">✦</div>
 
-        <!-- ============================================== -->
-        <!-- LAST PAGE TEXT (replace the lines below)       -->
-        <!-- ============================================== -->
-        <h2 class="plan-title">I'll pick you up at <span class="time">10:00 AM</span></h2>
+            <!-- ============================================ -->
+            <!-- LAST PAGE TEXT                              -->
+            <!-- ============================================ -->
+            <h2 class="plan-title">
+              I'll pick you up at <span class="time">10:00 AM</span>
+            </h2>
+            <ul class="plan-list">
+              <li><span class="dot"></span> dress comfortable &amp; pretty</li>
+              <li><span class="dot"></span> mood: chill, happy, a little spoiled</li>
+              <li><span class="dot"></span> bring that smile of yours</li>
+              <li><span class="dot"></span> the rest is a surprise…</li>
+            </ul>
+            <p class="plan-foot">because the birthday girl deserves a whole day of being celebrated.</p>
+            <p class="plan-sign">♥ all yours</p>
+            <!-- ============================================ -->
 
-        <ul class="plan-list">
-          <li><span class="dot"></span> dress something comfortable & pretty</li>
-          <li><span class="dot"></span> mood: chill, happy, a little spoiled</li>
-          <li><span class="dot"></span> bring that smile of yours</li>
-          <li><span class="dot"></span> the rest is a surprise…</li>
-        </ul>
+          </div>
+        </div>
 
-        <p class="plan-foot">because the birthday girl deserves a whole day of being celebrated.</p>
-        <!-- ============================================== -->
-
-        <div class="ticket-stamp">♥ all yours</div>
       </div>
 
       <button class="restart-btn" id="restartBtn">replay from the start ↺</button>
@@ -278,7 +275,6 @@
 
 </main>
 
-<!-- progress dots -->
 <nav class="dots" aria-label="page navigation">
   <button class="dot-btn active" data-go="1" aria-label="page 1"></button>
   <button class="dot-btn" data-go="2" aria-label="page 2"></button>
