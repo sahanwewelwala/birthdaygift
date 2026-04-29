@@ -45,27 +45,29 @@ function openEnvelope() {
   const cardScene = document.getElementById('cardScene');
   const bookRight = document.getElementById('bookRight');
 
-  /* Open the flap */
+  /* 1. Open the flap */
   envFlap.classList.add('open');
 
-  /* After flap fully opens: fade out envelope */
-  setTimeout(() => {
-    envScene.classList.add('hiding');
-  }, reducedMotion ? 100 : 750);
+  /* 2. Fade envelope out */
+  const hideDelay = reducedMotion ? 50 : 720;
+  setTimeout(() => envScene.classList.add('hiding'), hideDelay);
 
-  /* Show the greeting card scene */
+  /* 3. Show card scene — set display:flex first, then on next frame trigger fade */
+  const showDelay = reducedMotion ? 100 : 1150;
   setTimeout(() => {
-    cardScene.classList.add('visible');
+    cardScene.classList.add('visible');          /* display:flex, opacity:0 */
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      cardScene.classList.add('faded-in');       /* fade to opacity:1 */
+    }));
 
-    /* Swing the right panel open */
+    /* 4. Swing right panel open */
     setTimeout(() => {
       bookRight.classList.add('open');
+      /* 5. Animate text after panel is halfway open */
+      setTimeout(animateCardText, reducedMotion ? 0 : 520);
+    }, reducedMotion ? 0 : 280);
 
-      /* Animate handwritten text after panel is ~halfway open */
-      setTimeout(animateCardText, reducedMotion ? 0 : 550);
-    }, reducedMotion ? 0 : 300);
-
-  }, reducedMotion ? 200 : 1200);
+  }, showDelay);
 }
 
 /* Step 2: text writes itself in */
@@ -110,7 +112,7 @@ function resetPage1() {
 
   envFlap.classList.remove('open');
   envScene.classList.remove('hiding');
-  cardScene.classList.remove('visible');
+  cardScene.classList.remove('visible', 'faded-in');
   bookRight.classList.remove('open');
 
   document.querySelectorAll('.hand-line, .hand-sentence').forEach(el => el.classList.remove('visible'));
